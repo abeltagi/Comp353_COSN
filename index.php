@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>Welcome to stupid cosn project</h1>
+        <h1>Welcome to  cosn project</h1>
         <nav>
             <a href="login.php">Login</a> |
             <a href="register.php">Register</a>
