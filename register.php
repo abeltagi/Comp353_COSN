@@ -4,10 +4,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    // Insert new user into the database
     $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $name, $email, $password);
     if ($stmt->execute()) {
-        echo "Registration successful! <a href='login.php'>Login here</a>";
+        // Get the last inserted ID
+        $user_id = $conn->insert_id;
+
+        // Redirect to profile.php with the user ID
+        header("Location: profile.php?id=$user_id");
+        exit();
     } else {
         echo "Error: " . $stmt->error;
     }

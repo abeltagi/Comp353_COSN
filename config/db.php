@@ -1,13 +1,13 @@
 <?php
-$host = '127.0.0.1'; // Use 127.0.0.1 instead of localhost for better compatibility
-$username = 'root';  // Default XAMPP username
-$password = '';      // Default XAMPP password (leave blank)
-$database = 'opc353_2'; // Your database name
+$host = 'opc353.encs.concordia.ca'; // Hostname from the email
+$user = 'opc353_2';                 // Username from the email
+$password = 'EngineerLikenessLines51'; // Password from the email
+$database = 'opc353_2';             // Database name from the email
 
-// Create connection
-$conn = new mysqli($host, $username, $password, $database);
+// Establish a connection to the database
+$conn = new mysqli($host, $user, $password, $database);
 
-// Debugging: Check connection
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } else {
