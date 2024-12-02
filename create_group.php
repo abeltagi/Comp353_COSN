@@ -13,8 +13,8 @@
         <h1>Create a Group</h1>
         <nav>
             <a class="btn btn-primary" href='home.php' role="button"><strong>Home</strong></a>
-            <a class="btn btn-primary" href='groups.php' role="button"><strong>Your Profile</strong></a> 
-            <a class="btn btn-primary" href='groups.php' role="button"><strong>Your Messages</strong></a> 
+            <a class="btn btn-primary" href='profile.php' role="button"><strong>Your Profile</strong></a> 
+            <a class="btn btn-primary" href='messages.php' role="button"><strong>Your Messages</strong></a> 
             <a class="btn btn-primary" href='groups.php' role="button"><strong>Your Groups</strong></a>
             <a class="btn btn-primary" href='logout.php' role="button"><strong>Logout</strong></a>          
         </nav>

@@ -62,7 +62,8 @@
                 // Set the user's status to Active
                 $update_status = "UPDATE members SET status = 'Active' WHERE id = {$user['id']}";
                 if ($conn->query($update_status) === TRUE) {
-                    header("Location: home.php"); // Redirect to the dashboard
+                    header("Location: home.php"); // Redirect to the home
+                    exit();
                 } else {
                     echo "Error updating status: " . $conn->error;
                 }

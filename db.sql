@@ -53,6 +53,6 @@ CREATE TABLE group_posts (
 );
 
 
-
+SELECT group_id, name FROM groups WHERE owner_id = 1;
 
 
