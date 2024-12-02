@@ -18,39 +18,76 @@
         </nav>
     </header>
 
+
+
     <div class="container" style="margin-left: 0; padding: 1rem ">
-        <div class="row">
-            <div class="col-2">
-                <h1>Register</h1>
-                <form method="POST">
-                    <!--First name-->
-                    <label for="firstname">First Name:</label>
-                    <input type="text" name="firstname" required><br><br>
-                    
-                    <!--Last name-->
-                    <label for="lastname">Last Name:</label>
-                    <input type="text" name="lastname" required><br><br>
-
-                    <!--User name-->
-                    <label for="username">Username:</label>
-                    <input type="text" name="username" required><br><br>
-
-                    <!--Location-->
-                    <label for="location">Location:</label>
-                    <input type="text" name="location" required><br><br>
-                    
-                    <!--Email-->
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" required><br><br>
-                    
-                    <!--Password-->
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" required><br><br>
-                    
-                    <button type="submit" value = "Submit" class="btn btn-primary">Register</button>
-                </form>
-            </div>
+    <h1>Register</h1><br>   
+    <form method = "POST" class="row g-3">
+        
+        <!--First name-->
+        <div class="col-6">
+            <label for="firstname" class="form-label">First Name:</label>
+            <input type="text" class="form-control" name="firstname" required>
         </div>
+
+        <!--Last name-->
+        <div class="col-6">
+            <label for="lastname" class="form-label">Last Name:</label>
+            <input type="text" class="form-control" name="lastname" required>
+        </div>
+        
+        <!--Username-->
+        <div class="col-6">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" class="form-control" name="username" required>
+        </div>
+
+        <!--Password-->
+        <div class="col-6">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" class="form-control" name="password" required>
+        </div>
+
+        <!--Email-->
+        <div class="col-8">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" name="email">
+        </div>
+
+        <!--Address-->
+        <div class="col-8">
+            <label for="address" class="form-label">Address:</label>
+            <input type="text" class="form-control" name="address" placeholder="1234 Main St" required>
+        </div>
+         
+        <!--Region-->
+        <div class="col-4">
+            <label for="region" class="form-label">Region:</label>
+            <input type="text" class="form-control" name="region" required>
+        </div>
+        
+        <!--Profession-->
+        <div class="col-8">
+            <label for="profession" class="form-label">Profession:</label>
+            <input type="text" class="form-control" name="profession" placeholder="Baker, Chef, Student, Teacher, etc" required>
+        </div>
+        
+        <!--Age-->
+        <div class="col-2">
+            <label for="age" class="form-label">Age:</label>
+            <input type="number" class="form-control" name="age">
+        </div>
+         
+        <!--Date of Birth-->
+        <div class="col-3">
+            <label for="dob" class="form-label">Date of Birth:</label>
+            <input type="date" class="form-control" name="dob">
+        </div>
+  
+        <div class="col-12">
+            <button type="submit" value = "Submit" class="btn btn-primary">Register Now</button>
+        </div>
+    </form>
     </div>
     
     
@@ -60,15 +97,16 @@
             $firstname = $_POST['firstname'];
             $lastname = $_POST['lastname'];
             $username = $_POST['username'];
-            $location = $_POST['location'];
-
-            //$name = $_POST['name'];
             $email = $_POST['email'];
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            //$stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-            //$stmt->bind_param("sss", $name, $email, $password);
-            $stmt = $conn->prepare("INSERT INTO members (firstname, lastname, username, email, password, location) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssss", $firstname, $lastname, $username, $email, $password, $location);
+            $address = $_POST['address'];
+            $profession = $_POST['profession'];
+            $region = $_POST['region'];
+            $age = $_POST['age'];
+            $dob = $_POST['dob'];
+    
+            $stmt = $conn->prepare("INSERT INTO members (firstname, lastname, username, email, password, address, age, profession, region, dob) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssisss", $firstname, $lastname, $username, $email, $password, $address, $age, $profession, $region, $dob);
             try {
                 // Attempt to execute the prepared statement
                 if ($stmt->execute()) {

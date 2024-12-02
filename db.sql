@@ -9,17 +9,27 @@ CREATE TABLE members (
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    location VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    age INT NOT NULL, 
+    profession VARCHAR(100) NOT NULL, 
+    region VARCHAR(100) NOT NULL, 
     privilege ENUM('Admin', 'Senior', 'Junior') DEFAULT 'Junior' NOT NULL,
-    status ENUM('Active', 'Inactive', 'Suspended') DEFAULT 'Active' NOT NULL  
+    status ENUM('Active', 'Inactive', 'Suspended') DEFAULT 'Active' NOT NULL,
+    dob DATE NOT NULL
+    
 );
  
+DROP TABLE members;
+DROP TABLE groups;
+DROP TABLE group_members;
+DROP TABLE group_posts;
 
 CREATE TABLE groups (
     group_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
     description TEXT,
     owner_id INT NOT NULL,
+    interest VARCHAR(100) NOT NULL,
     FOREIGN KEY (owner_id) REFERENCES members(id) ON DELETE CASCADE
 );
 

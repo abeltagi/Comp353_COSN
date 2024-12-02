@@ -17,7 +17,7 @@
             <a class="btn btn-primary" href='register.php' role="button"><strong>Register</strong></a> 
         </nav>
     </header>
-
+    <main>
     <div class="container" style="margin-left: 0; padding: 1rem ">
         <div class="row">
             <div class="col-2">
@@ -32,7 +32,7 @@
             </div>
         </div>
     </div>
-    
+    </main>
     
     <?php
         session_start();
@@ -56,11 +56,16 @@
                 
                 // Set session variables
                 $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
                 $_SESSION['privilege'] = $user['privilege'];
                 
-                // Redirect to home page
-                header("Location: home.php");
-                exit;
+                // Set the user's status to Active
+                $update_status = "UPDATE members SET status = 'Active' WHERE id = {$user['id']}";
+                if ($conn->query($update_status) === TRUE) {
+                    header("Location: home.php"); // Redirect to the dashboard
+                } else {
+                    echo "Error updating status: " . $conn->error;
+                }
             } else {
                 echo '<div class="alert alert-danger" role="alert">
                             Error: Invalid email or password.

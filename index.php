@@ -14,9 +14,7 @@
         <h1>Welcome to The Community Online Social Network</h1>
         <nav>
             <a class="btn btn-primary" href='login.php' role="button"><strong>Login</strong></a> 
-            <a class="btn btn-primary" href='register.php' role="button"><strong>Register</strong></a> 
-            <a href="bootstraptest.php">BootStrap Test</a> 
-            
+            <a class="btn btn-primary" href='register.php' role="button"><strong>Register</strong></a>  
         </nav>
     </header>
     <main>
