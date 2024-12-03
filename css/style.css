@@ -19,3 +19,7 @@ nav a {
 main {
     padding:  1rem;
 }
+
+.custom-card-height {
+    height: 20rem; /* Set a consistent height for all cards */
+}

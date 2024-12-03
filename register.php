@@ -123,7 +123,12 @@
                 } else {
                     // For other errors, show a generic message
                     echo '<div class="alert alert-danger" role="alert">
-                                Error: Something went wrong. Please try again later.
+                                Error: Something went wrong. Please try again later. <br>
+                                You must use a Proton email ending in: <br>
+                                @proton.me
+                                @protonmail.com
+                                @pm.me
+                                @protonmail.ch
                           </div>';
                 }
             }

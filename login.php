@@ -43,16 +43,32 @@
             $password = $_POST['password'];
             
             // Prepare the SQL statement
-            $stmt = $conn->prepare("SELECT * FROM members WHERE username = ?");
+            $stmt = $conn->prepare("SELECT id, password, status FROM members WHERE username = ?");
             $stmt->bind_param("s", $username);
             $stmt->execute();
             
             // Fetch the result
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
-
+            try{
+            // Check if the user is suspended
+                if(!isset($_POST['status'])){
+                    throw new Exception();
+                }
+            }catch(Exception $e){
+                echo '<div class="alert alert-danger" role="alert">
+                        This account does not exist. Please register to login.
+                    </div>';
+                    exit();
+            }
+            if ($user['status'] === 'Suspended') {
+                echo '<div class="alert alert-danger" role="alert">
+                        Your account is suspended. Please contact an administrator.
+                    </div>';
+                    exit();
+            }      
             // Verify user and password
-            if ($user && password_verify($password, $user['password'])) {
+            elseif ($user && password_verify($password, $user['password'])) {
                 
                 // Set session variables
                 $_SESSION['user_id'] = $user['id'];
@@ -73,6 +89,8 @@
                       </div>';
             }
             $stmt->close();
+        
+        
         }
     ?>
 

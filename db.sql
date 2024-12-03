@@ -8,12 +8,18 @@ CREATE TABLE members (
     lastname VARCHAR(100) NOT NULL,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
+    CONSTRAINT email_domain_check CHECK (
+        email LIKE '%@proton.me' OR
+        email LIKE '%@protonmail.com' OR
+        email LIKE '%@pm.me' OR
+        email LIKE '%@protonmail.ch'
+    ),
     password VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     age INT NOT NULL, 
     profession VARCHAR(100) NOT NULL, 
     region VARCHAR(100) NOT NULL, 
-    privilege ENUM('Admin', 'Senior', 'Junior') DEFAULT 'Junior' NOT NULL,
+    privilege ENUM('Admin', 'Senior', 'Member') DEFAULT 'Member' NOT NULL,
     status ENUM('Active', 'Inactive', 'Suspended') DEFAULT 'Active' NOT NULL,
     dob DATE NOT NULL
     
@@ -47,6 +53,17 @@ CREATE TABLE group_posts (
     group_id INT NOT NULL,
     member_id INT NOT NULL,
     content TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE join_requests (
+    request_id INT AUTO_INCREMENT PRIMARY KEY,
+    group_id INT NOT NULL,
+    member_id INT NOT NULL,
+    status ENUM('Pending', 'Accepted', 'Declined') DEFAULT 'Pending',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
     FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
