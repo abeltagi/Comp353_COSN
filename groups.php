@@ -23,11 +23,35 @@
     <main>
         <div class="container">
             <div class="row">
-                <div class="col-2 d-flex justify-content-center">
-                    <!-- Optional Sidebar or Empty Space -->
+                <div class="col-4 d-flex justify-content-center">
+                <div class="card border-0" style="width: 16rem; height: 28rem;border-radius: 10px;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                    <div class="card-body">
+                    <div class="container">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <a href="create_group.php" class="btn btn-primary mb-2">Create a Group</a>
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="manage_join_request.php" class="btn btn-primary mb-2">Manage Group Requests</a>
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="add_remove_member_in_group.php" class="btn btn-secondary mb-2">Add/Remove a Member from a Group</a>
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="request_join_group.php" class="btn btn-success mb-2">Request to Join a Group</a> 
+                                    </div>     
+                                    <div>
+                                        <a href="leave_group.php" class="btn btn-danger mb-2">Leave a Group</a>
+                                        <a href="delete_group.php" class="btn btn-danger mb-2">Delete a Group</a>
+                                    </div>
+                                </div>
                 </div>
+                    </div>
+                </div>
+                
+            </div>
 
-                <div class="col-8 d-flex justify-content-center">
+                <div class="col-6 d-flex justify-content-center">
                     <div class="card border-0" style="width: 64rem;border-radius: 10px;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
                         <div class="card-body">
                             <h5 class="card-title" style="color: #007bff;"><strong>Groups You're In</strong></h5>
@@ -107,26 +131,6 @@
                                 echo "<p>You are not part of any groups.</p>";
                             }
                             ?>
-                            <div class="container mt-4">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <a href="create_group.php" class="btn btn-primary mb-2">Create a Group</a>
-                                    </div>
-                                    <div class="col-12">
-                                        <a href="manage_join_request.php" class="btn btn-primary mb-2">Manage Group Requests</a>
-                                    </div>
-                                    <div class="col-12">
-                                        <a href="add_remove_member_in_group.php" class="btn btn-secondary mb-2">Add/Remove a Member from a Group</a>
-                                    </div>
-                                    <div class="col-12">
-                                        <a href="request_join_group.php" class="btn btn-success mb-2">Request to Join a Group</a> 
-                                    </div>     
-                                    <div>
-                                        <a href="leave_group.php" class="btn btn-danger mb-2">Leave a Group</a>
-                                        <a href="delete_group.php" class="btn btn-danger mb-2">Delete a Group</a>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COSN - About</title>
+    <title>COSN - Manage Members</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- Bootstrap boilerplate -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
@@ -46,9 +46,9 @@
 
         <div class="container mt-4">
             <h3>Manage Members</h3>
-            <table class="table">
+            <table class="table table-hover border-dark">
                 <thead>
-                    <tr>
+                    <tr class="table-dark ">
                         <th>Username</th>
                         <th>Privilege</th>
                         <th>Status</th>
@@ -57,10 +57,10 @@
                 </thead>
                 <tbody>
                     <?php while ($member = $result_members->fetch_assoc()): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($member['username']); ?></td>
-                            <td><?php echo htmlspecialchars($member['privilege']); ?></td>
-                            <td><?php echo htmlspecialchars($member['status']); ?></td>
+                            <tr>
+                            <td class="text-center align-middle"><?php echo htmlspecialchars($member['username']); ?></td>
+                            <td class="text-center align-middle"><?php echo htmlspecialchars($member['privilege']); ?></td>
+                            <td class="text-center align-middle"><?php echo htmlspecialchars($member['status']); ?></td>
                             <td>
                                 <!-- Update Privilege and Status Form -->
                                 <form method="POST" action="admin_update_member.php" class="d-inline">
@@ -68,7 +68,7 @@
                                     <div class="d-flex gap-2">
                                         <!-- Privilege Dropdown -->
                                         <select name="new_privilege" class="form-select d-inline w-auto">
-                                            <option value="Member" <?php echo $member['privilege'] === 'Member' ? 'selected' : ''; ?>>Member</option>
+                                            <option value="Junior" <?php echo $member['privilege'] === 'Junior' ? 'selected' : ''; ?>>Member/Junior</option>
                                             <option value="Senior" <?php echo $member['privilege'] === 'Senior' ? 'selected' : ''; ?>>Senior</option>
                                             <option value="Admin" <?php echo $member['privilege'] === 'Admin' ? 'selected' : ''; ?>>Admin</option>
                                         </select>
@@ -81,13 +81,14 @@
                                         <!-- Update Button -->
                                         <button type="submit" class="btn btn-primary btn-sm">Update</button>
                                         
-                                    </div>
+                                   
                                 </form>
                                 <!-- Delete Member Button -->
                                 <form method="POST" action="admin_delete_member.php" class="d-inline">
                                             <input type="hidden" name="member_id" value="<?php echo htmlspecialchars($member['id']); ?>">
-                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            <button type="submit" class="btn btn-danger btn-sm mt-1 ">Delete</button>
                                 </form>
+                                </div>
                             </td>
                         </tr>
                     <?php endwhile; ?>

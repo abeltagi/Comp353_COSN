@@ -71,6 +71,16 @@
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
         }
+        // Fetch privacy settings for the user
+        $sql_privacy = "SELECT hide_firstname, hide_lastname, hide_email, hide_address, hide_region, hide_dob, hide_age, hide_profession FROM member_privacy WHERE member_id = ?";
+        $stmt_privacy = $conn->prepare($sql_privacy);
+        $stmt_privacy->bind_param("i", $user_id);
+        $stmt_privacy->execute();
+        $privacy_result = $stmt_privacy->get_result();
+
+        if ($privacy_result->num_rows > 0) {
+            $privacy_settings = $privacy_result->fetch_assoc();
+        }
         
     ?>    
 
@@ -83,16 +93,41 @@
                 <div class="profile-card">
                     <h4>Profile</h4>
                     <p style="word-break: break-word;"><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
-                    <p style="word-break: break-word;"><strong>First Name:</strong> <?php echo htmlspecialchars($user['firstname']); ?></p>
-                    <p style="word-break: break-word;"><strong>Last Name:</strong> <?php echo htmlspecialchars($user['lastname']); ?></p>
-                    <p style="word-break: break-word;"><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-                    <p style="word-break: break-word;"><strong>Date of Birth:</strong> <?php echo htmlspecialchars($user['dob'] ?? 'N/A'); ?></p>
-                    <p style="word-break: break-word;"><strong>Region:</strong> <?php echo htmlspecialchars($user['region'] ?? 'N/A'); ?></p>
-                    <p style="word-break: break-word;"><strong>Address:</strong> <?php echo htmlspecialchars($user['address']); ?></p>
-                    <p style="word-break: break-word;"><strong>Age:</strong> <?php echo htmlspecialchars($user['age']); ?></p>
-                    <p style="word-break: break-word;"><strong>Profession:</strong> <?php echo htmlspecialchars($user['profession'] ?? 'N/A'); ?></p>
+                    
+                    <?php if (empty($privacy_settings['hide_firstname'])): ?>
+                        <p style="word-break: break-word;"><strong>First Name:</strong> <?php echo htmlspecialchars($user['firstname']); ?></p>
+                    <?php endif; ?>
+                    
+                    <?php if (empty($privacy_settings['hide_lastname'])): ?>
+                        <p style="word-break: break-word;"><strong>Last Name:</strong> <?php echo htmlspecialchars($user['lastname']); ?></p>
+                    <?php endif; ?>
+                    
+                    <?php if (empty($privacy_settings['hide_email'])): ?>
+                        <p style="word-break: break-word;"><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+                    <?php endif; ?>
+                    
+                    <?php if (empty($privacy_settings['hide_dob'])): ?>
+                        <p><strong>Date of Birth:</strong> <?php echo htmlspecialchars($user['dob'] ?? 'N/A'); ?></p>
+                    <?php endif; ?>
+                    
+                    <?php if (empty($privacy_settings['hide_region'])): ?>
+                        <p><strong>Region:</strong> <?php echo htmlspecialchars($user['region'] ?? 'N/A'); ?></p>
+                    <?php endif; ?>
+                    
+                    <?php if (empty($privacy_settings['hide_address'])): ?>
+                        <p><strong>Address:</strong> <?php echo htmlspecialchars($user['address']); ?></p>
+                    <?php endif; ?>
+                    
+                    <?php if (empty($privacy_settings['hide_age'])): ?>
+                        <p><strong>Age:</strong> <?php echo htmlspecialchars($user['age']); ?></p>
+                    <?php endif; ?>  
+                    
+                    <?php if (empty($privacy_settings['hide_profession'])): ?>
+                        <p><strong>Profession:</strong> <?php echo htmlspecialchars($user['profession']); ?></p>
+                    <?php endif; ?>
                     
                     <a href="edit_profile.php" class="btn btn-primary btn-custom">Edit Profile</a>
+                    <a href="privacy_settings.php" class="btn btn-secondary btn-custom mt-2">Privacy Settings</a>
                     <a href="delete_account.php" class="btn btn-danger btn-custom mt-2">Delete Account</a>
                 </div>
             </div>

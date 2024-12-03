@@ -24,6 +24,20 @@ CREATE TABLE members (
     dob DATE NOT NULL
     
 );
+CREATE TABLE member_privacy (
+    member_id INT PRIMARY KEY,
+    hide_firstname BOOLEAN DEFAULT FALSE,
+    hide_lastname BOOLEAN DEFAULT FALSE,
+    hide_email BOOLEAN DEFAULT FALSE,
+    hide_address BOOLEAN DEFAULT FALSE,
+    hide_age BOOLEAN DEFAULT FALSE,
+    hide_profession BOOLEAN DEFAULT FALSE,
+    hide_region BOOLEAN DEFAULT FALSE,
+    hide_dob BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+DROP TABLE member_privacy;
  
 DROP TABLE members;
 DROP TABLE groups;

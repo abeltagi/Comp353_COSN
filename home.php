@@ -121,7 +121,7 @@
                                             echo "<ul class='list-group'>";
                                             while ($request = $result_pending->fetch_assoc()) {
                                                 echo "<li class='list-group-item'>
-                                                      <b>" . htmlspecialchars($request['group_name']) . "</b>: 
+                                                      <b>" . htmlspecialchars($request['group_name']) . "</b> 
                                                       " . "<br>
                                                       <small>Requested on: " . htmlspecialchars($request['created_at']) . "</small>
                                                       </li>";
