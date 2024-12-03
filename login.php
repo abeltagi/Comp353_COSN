@@ -44,23 +44,24 @@
             
             // Prepare the SQL statement
             $stmt = $conn->prepare("SELECT id, password, status FROM members WHERE username = ?");
-            $stmt->bind_param("s", $username);
+            $stmt->bind_param("s", $username,);
             $stmt->execute();
+
             
             // Fetch the result
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
             try{
-            // Check if the user is suspended
-                if(!isset($_POST['status'])){
-                    throw new Exception();
+                // Check if the user is suspended
+                    if(!isset($user['status'])){
+                        throw new Exception();
+                    }
+                }catch(Exception $e){
+                    echo '<div class="alert alert-danger" role="alert">
+                            This account does not exist. Please register to login.
+                        </div>';
+                        exit();
                 }
-            }catch(Exception $e){
-                echo '<div class="alert alert-danger" role="alert">
-                        This account does not exist. Please register to login.
-                    </div>';
-                    exit();
-            }
             if ($user['status'] === 'Suspended') {
                 echo '<div class="alert alert-danger" role="alert">
                         Your account is suspended. Please contact an administrator.
