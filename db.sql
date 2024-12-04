@@ -83,6 +83,32 @@ CREATE TABLE join_requests (
     FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
 );
 
+CREATE TABLE friends (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL, -- User who initiated the request
+    friend_id INT NOT NULL, -- Friend user
+    status ENUM('Pending', 'Accepted') DEFAULT 'Pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
+    FOREIGN KEY (friend_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+
+-- blocks table is related to friends table above
+CREATE TABLE blocks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    blocker_id INT NOT NULL, -- The member who blocks
+    blocked_id INT NOT NULL, -- The member being blocked
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (blocker_id) REFERENCES members(id) ON DELETE CASCADE,
+    FOREIGN KEY (blocked_id) REFERENCES members(id) ON DELETE CASCADE,
+    UNIQUE(blocker_id, blocked_id) -- Prevent duplicate blocks
+);
+
+
+DROP TABLE friends;
+
+DROP TABLE blocks;
 
 SELECT group_id, name FROM groups WHERE owner_id = 1;
 

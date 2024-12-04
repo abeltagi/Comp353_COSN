@@ -43,10 +43,11 @@
 </head>
 <body>
     <header>
-        <h1>Welcome to The Community Online Social Network</h1>
+        <h1><strong>Welcome to The Community Online Social Network</strong></h1><br>
         <nav>
             <a class="btn btn-primary" href='home.php' role="button"><strong>Home</strong></a>
             <a class="btn btn-primary" href='profile.php' role="button"><strong>Your Profile</strong></a>
+            <a class="btn btn-primary" href='friends.php' role="button"><strong>Your Friends</strong></a>
             <a class="btn btn-primary" href='messages.php' role="button"><strong>Your Messages</strong></a> 
             <a class="btn btn-primary" href='groups.php' role="button"><strong>Your Groups</strong></a>  
             <a class="btn btn-primary" href='logout.php' role="button"><strong>Logout</strong></a>   
