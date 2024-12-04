@@ -22,6 +22,7 @@
         </nav>
     </header>
     <main>
+        
         <?php
             session_start();                            // Start the session
             require 'config/db.php';                    // Include the database connection
