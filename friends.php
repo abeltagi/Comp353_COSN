@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,22 +13,50 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body style="background-color: #f4f4f4; font-family: Arial, sans-serif;">
-    <header>
-        <h1><strong>Welcome to Your Groups</strong></h1>
-        <nav>
-            <a class="btn btn-primary" href='home.php' role="button"><strong>Home</strong></a> 
-            <a class="btn btn-primary" href='profile.php' role="button"><strong>Your Profile</strong></a>
-            <a class="btn btn-primary" href='friends.php' role="button"><strong>Your Friends</strong></a>
-            <a class="btn btn-primary" href='messages.php' role="button"><strong>Your Messages</strong></a> 
-            <a class="btn btn-primary" href='groups.php' role="button"><strong>Your Groups</strong></a>  
-            <a class="btn btn-primary" href='logout.php' role="button"><strong>Logout</strong></a> 
+<header>
+        <!-- Bootstrap Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><strong>COSN</strong></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="home.php"><strong>Home</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.php"><strong>Your Profile</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="friends.php"><strong>Your Friends</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="messages.php"><strong>Your Messages</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="events.php"><strong>Your Events</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="search.php"><strong>Search</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php"><strong>Logout</strong></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </nav>
     </header>
     <main>
     
     <div class="container my-4">
     <!-- Send Friend Request Card -->
-    <div class="card p-4 shadow-sm mb-4">
+    <div class="card p-4 border-0 mb-4" style="border-radius: 10px;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
         <h2 class="mb-4"><strong>Send a Friend Request to a Member</strong></h2>
         <form method="POST" action="send_friend_request.php" class="row g-3">
             <!-- Friend Username Input -->
@@ -42,27 +73,26 @@
     </div>
     </div>
     
-
     <div class="container my-4">
     <!-- Your Friends Card -->
-    <div class="card p-4 shadow-sm mb-4">
+    <div class="card p-4 border-0 mb-4" style="border-radius: 10px;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
     <h3 class="mb-4"><strong>Your Friends</strong></h3>
     <ul class="list-group list-group-flush">
     <?php
         // include database connection
         require 'config/db.php';
-        session_start();
+        
         $user_id = $_SESSION['user_id']; // Logged-in user ID
         // Fetch all accepted friends where the current user is either the member or friend
         $sql = "SELECT DISTINCT m.username 
                 FROM friends f
                 JOIN members m ON f.friend_id = m.id
-                WHERE f.member_id = ? AND f.status = 'Accepted'
+                WHERE f.member_id = ? AND f.status = 'Accepted' AND m.status = 'Active'
                 UNION
                 SELECT DISTINCT m.username
                 FROM friends f
                 JOIN members m ON f.member_id = m.id
-                WHERE f.friend_id = ? AND f.status = 'Accepted'";
+                WHERE f.friend_id = ? AND f.status = 'Accepted' AND m.status = 'Active'";
 
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ii", $user_id, $user_id);
@@ -80,17 +110,17 @@
                     </li>";
             }
         } else {
-            echo "<li class='list-group-item'>You have no friends yet.</li>";
+            echo "<li class='list-group-item text-muted'>You have no friends yet or they are all inactive.</li>";
         }
     ?>
     </ul>
     </div>
     </div>    
 
-
+   
     <div class="container my-4">
     <!-- Pending Friend Requests Card -->
-    <div class="card p-4 shadow-sm">
+    <div class="card p-4 border-0" style="border-radius: 10px;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
         <h3 class="mb-4"><strong>Members Who Want to Friend You</strong></h3>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -136,7 +166,7 @@
                                   </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='3' class='text-center'>No members want to friend you currently.</td></tr>";
+                        echo "<tr><td colspan='3' class='text-center text-muted'>No members want to friend you currently.</td></tr>";
                     }
                     ?>
                 </tbody>
@@ -147,7 +177,7 @@
 
     <div class="container my-4">
     <!-- Form to Block a Member Card -->
-    <div class="card p-4 shadow-sm">
+    <div class="card p-4 border-0" style="border-radius: 10px;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
         <h3 class="mb-4"><strong>Block a Member</strong></h3>
         <form method="POST" action="block_member.php" class="row g-3">
             <!-- Username Input -->
@@ -187,8 +217,10 @@ if ($result) {
     $blocked_members = [];
 }
 ?>
+
+
 <div class="container my-4">
-    <div class="card p-4 shadow-sm">
+    <div class="card p-4 border-0" style="border-radius: 10px;box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
         <h3 class="mb-4"><strong>Blocked Members</strong></h3>
         <ul class="list-group list-group-flush">
             <?php if (!empty($blocked_members)): ?>

@@ -1,4 +1,6 @@
+
 <?php
+//local hosting server
 $host = 'localhost';
 $user = 'root';
 $password = '';

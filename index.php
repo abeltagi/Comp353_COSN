@@ -10,11 +10,26 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    <header>
-        <h1>Welcome to The Community Online Social Network</h1>
-        <nav>
-            <a class="btn btn-primary" href='login.php' role="button"><strong>Login</strong></a> 
-            <a class="btn btn-primary" href='register.php' role="button"><strong>Register</strong></a>  
+<header>
+        <h1>Welcome To The Community Online Social Network.</h1><br>
+        <!-- Bootstrap Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><strong>COSN</strong></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.php"><strong>Login</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="register.php"><strong>Register</strong></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </nav>
     </header>
     <main>
@@ -23,6 +38,10 @@
         
         <h2>About COSN</h2>
         <p>This is your Community Online Social Network.</p>
+        
+        <a href="register.php" class="btn btn-primary btn-lg mt-4 text-center">Click Here to Register</a>
+        <a href="login.php" class="btn btn-primary btn-lg mt-4 text-center">Click Here to Login</a>
+
     </main>
 
     <!--Bootstrap boilerplate -->
