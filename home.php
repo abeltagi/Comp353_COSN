@@ -56,6 +56,7 @@ session_start();
 </header>
 
     <main>
+        
         <?php
 
         require 'config/db.php'; // Include the database connection
