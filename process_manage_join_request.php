@@ -42,6 +42,12 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">
@@ -64,7 +70,7 @@ session_start();
             // Fetch the request details to ensure the logged-in user is the group owner
             $sql = "SELECT jr.group_id, g.owner_id, jr.member_id
                     FROM join_requests jr
-                    JOIN groups g ON jr.group_id = g.group_id
+                    JOIN groupss g ON jr.group_id = g.group_id
                     WHERE jr.request_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $request_id);

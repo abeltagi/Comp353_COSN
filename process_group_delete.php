@@ -42,6 +42,12 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">
@@ -67,7 +73,7 @@ session_start();
                 $owner_id = $_SESSION['user_id'];      // Logged-in user's ID
 
                 // Verify that the current user is the owner of the group
-                $sql = "SELECT owner_id FROM groups WHERE group_id = ?";
+                $sql = "SELECT owner_id FROM groupss WHERE group_id = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("i", $group_id);
                 $stmt->execute();
@@ -78,7 +84,7 @@ session_start();
                 $stmt->close();
 
                 // Delete the group (and cascade to its members)
-                $sql = "DELETE FROM groups WHERE group_id = ?";
+                $sql = "DELETE FROM groupss WHERE group_id = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("i", $group_id);
                 if ($stmt->execute()) {

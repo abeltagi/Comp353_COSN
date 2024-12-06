@@ -7,7 +7,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COSN - About</title>
+    <title>COSN - Delete a Group</title>
     <link rel="stylesheet" href="css/style.css">
     <!--Bootstrap boilerplate -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -43,6 +43,12 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">
@@ -52,7 +58,7 @@ session_start();
                 </div>
             </div>
         </nav>
-</header>
+    </header>
 
     <?php
     require 'config/db.php';
@@ -64,7 +70,7 @@ session_start();
 
     // Fetch groups owned by the logged-in user
     $owner_id = $_SESSION['user_id'];
-    $sql = "SELECT group_id, name FROM groups WHERE owner_id = ?";
+    $sql = "SELECT group_id, name FROM groupss WHERE owner_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $owner_id);
     $stmt->execute();

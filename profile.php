@@ -74,6 +74,12 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">
@@ -113,8 +119,10 @@ session_start();
         if ($privacy_result->num_rows > 0) {
             $privacy_settings = $privacy_result->fetch_assoc();
         }
-        
-    ?>    
+    
+    ?> 
+    
+    
 
     <!-- Header -->
     <div class="container mt-4">
@@ -160,7 +168,37 @@ session_start();
                     
                     <a href="edit_profile.php" class="btn btn-primary btn-custom">Edit Profile</a>
                     <a href="privacy_settings.php" class="btn btn-secondary btn-custom mt-2">Privacy Settings</a>
-                    <a href="delete_account.php" class="btn btn-danger btn-custom mt-2">Delete Account</a>
+                    <a href="delete_account.php" class="btn btn-danger btn-custom mt-2 mb-2">Delete Account</a>
+
+                    <?php 
+                        // Check if the user is a junior
+                        $sql_check_privilege = "SELECT privilege FROM members WHERE id = ?";
+                        $stmt_privilege = $conn->prepare($sql_check_privilege);
+                        $stmt_privilege->bind_param("i", $user_id);
+                        $stmt_privilege->execute();
+                        $privilege_result = $stmt_privilege->get_result();
+                        $user_privilege = $privilege_result->fetch_assoc();
+
+                        if ($user_privilege['privilege'] === 'Member') {
+                            // Check if a request already exists
+                            $sql_check_request = "SELECT * FROM senior_requests WHERE member_id = ?";
+                            $stmt = $conn->prepare($sql_check_request);
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+                            $request_result = $stmt->get_result();
+                        
+                            if ($request_result->num_rows > 0) {
+                                echo '<p>You have already requested to become a senior. Please wait for approval.</p>';
+                            } else {
+                                echo '
+                                <form method="POST" action="request_senior.php">
+                                    <button type="submit" class="btn btn-secondary">Request Senior Privileges</button>
+                                </form>';
+                            }
+                        }
+                    
+                    
+                    ?>
                 </div>
             </div>
 

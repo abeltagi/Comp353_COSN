@@ -124,6 +124,12 @@ $suggestions_result = $stmt_suggestions->get_result();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">

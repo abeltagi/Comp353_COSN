@@ -7,7 +7,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COSN - Request Join Group</title>
+    <title>COSN - Your Posts</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- Bootstrap boilerplate -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -60,51 +60,9 @@ session_start();
             </div>
         </nav>
     </header>
-
-    <main class="container mt-5">
-        <div class="card shadow-sm p-4">
-            <h2 class="text-center mb-4"><strong>Groups You Can Request to Join</strong></h2>
-            <?php
-            require 'config/db.php';
-
-            // Get the logged-in user's ID
-            $member_id = $_SESSION['user_id'];
-
-            // Fetch groups the user is not a part of
-            $sql = "SELECT g.group_id, g.name, g.description
-                    FROM groupss g
-                    WHERE g.group_id NOT IN (
-                        SELECT group_id FROM group_members WHERE member_id = ?
-                    )";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $member_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            ?>
-            <?php if ($result->num_rows > 0): ?>
-                <ul class="list-group">
-                    <?php while ($group = $result->fetch_assoc()): ?>
-                        <li class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="mb-1"><strong><?php echo htmlspecialchars($group['name']); ?></strong></h5>
-                                    <p class="mb-1"><?php echo htmlspecialchars($group['description']); ?></p>
-                                </div>
-                                <form method="POST" action="process_request_join_group.php" class="d-inline">
-                                    <input type="hidden" name="group_id" value="<?php echo $group['group_id']; ?>">
-                                    <button type="submit" class="btn btn-primary btn-sm">Request to Join</button>
-                                </form>
-                            </div>
-                        </li>
-                    <?php endwhile; ?>
-                </ul>
-            <?php else: ?>
-                <p class="text-muted text-center mt-3">No groups available to join at this time.</p>
-            <?php endif; ?>
-            <?php $stmt->close(); ?>
-        </div>
+    <main>
+        
     </main>
-
     <!-- Bootstrap boilerplate -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
@@ -115,4 +73,3 @@ session_start();
 </body>
 
 </html>
-

@@ -44,6 +44,12 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">
@@ -76,6 +82,13 @@ session_start();
         // Fetch all members
         $sql_members = "SELECT id, username, privilege, status FROM members";
         $result_members = $conn->query($sql_members);
+
+
+        // Fetch all pending senior requests
+        $sql_requests = "SELECT sr.id AS request_id, m.username, sr.requested_at 
+        FROM senior_requests sr 
+        JOIN members m ON sr.member_id = m.id";
+        $result_requests = $conn->query($sql_requests);
         ?>
 
         <div class="container mt-5">
@@ -153,6 +166,55 @@ session_start();
                 </div>
             </div>
         </div>
+
+        <div class="container mt-5">
+    <div class="card p-4 border-0" style="border-radius: 10px;box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
+        <h2 class="mb-4 text-center"><strong>Manage Senior Requests</strong></h2>
+        <div class="table-responsive">
+            <table class="table table-hover border">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Requested At</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($result_requests->num_rows > 0): ?>
+                        <?php while ($request = $result_requests->fetch_assoc()): ?>
+                            <tr>
+                                <td class="text-center align-middle">
+                                    <?php echo htmlspecialchars($request['username']); ?>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <?php echo htmlspecialchars($request['requested_at']); ?>
+                                </td>
+                                <td class="align-middle">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <!-- Accept Request -->
+                                        <form method="POST" action="accept_senior_request.php" class="d-inline">
+                                            <input type="hidden" name="request_id" value="<?php echo $request['request_id']; ?>">
+                                            <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                        </form>
+                                        <!-- Decline Request -->
+                                        <form method="POST" action="decline_senior_request.php" class="d-inline">
+                                            <input type="hidden" name="request_id" value="<?php echo $request['request_id']; ?>">
+                                            <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="3" class="text-center">No pending requests.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
     </main>
 
     <!-- Bootstrap boilerplate -->

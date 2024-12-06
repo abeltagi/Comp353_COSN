@@ -4,7 +4,7 @@ require 'config/db.php'; // Database connection
 
 $member_id = $_SESSION['user_id']; // Replace with session value
 $sql = "SELECT g.group_id, g.name, g.description, gm.role 
-        FROM groups g
+        FROM groupss g
         JOIN group_members gm ON g.group_id = gm.group_id
         WHERE gm.member_id = $member_id";
 

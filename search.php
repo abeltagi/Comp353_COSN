@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['search_keyword'], $_GET
     } elseif ($category === 'groups') {
         // Search groups by interest or name
         $sql = "SELECT name, description, interest 
-                FROM groups 
+                FROM groupss 
                 WHERE name LIKE ? OR interest LIKE ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $keyword, $keyword);

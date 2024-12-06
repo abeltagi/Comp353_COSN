@@ -44,6 +44,12 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">
@@ -67,7 +73,7 @@ session_start();
 
         // Retrieve groups managed by the logged-in user
         $owner_id = $_SESSION['user_id'];
-        $sql = "SELECT group_id, name FROM groups WHERE owner_id = ?";
+        $sql = "SELECT group_id, name FROM groupss WHERE owner_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $owner_id);
         $stmt->execute();
@@ -100,10 +106,17 @@ session_start();
                     </select>
                 </div>
 
-                <!-- Username -->
                 <div class="col-12">
-                    <label for="username" class="form-label">Username:</label>
-                    <input type="text" id="username" class="form-control" name="username" required>
+                    <!-- First name -->
+                    <label for="firstname" class="form-label">First Name</label>
+                    <input type="text" id="firstname" class="form-control" name="firstname" required>
+                    
+                    <!-- Date of birth -->
+                    <label for="dob" class="form-label">Date of Birth:</label>
+                    <input type="date" id="dob" class="form-control" name="dob" required>
+                    <!-- Email Address -->
+                    <label for="email" class="form-label">Email Address:</label>
+                    <input type="email" id="username" class="form-control" name="email" required>
                 </div>
 
                 <!-- Action Selection -->

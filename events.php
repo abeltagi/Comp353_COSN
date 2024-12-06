@@ -42,6 +42,12 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">
@@ -99,7 +105,7 @@ $stmt_past->execute();
 $past_events = $stmt_past->get_result();
 
 //Fetch groups the user is a part of
-$sql_groups = "SELECT g.group_id, g.name FROM groups g
+$sql_groups = "SELECT g.group_id, g.name FROM groupss g
 JOIN group_members gm ON g.group_id = gm.group_id
 WHERE gm.member_id = ?";
 $stmt_groups = $conn->prepare($sql_groups);
@@ -108,9 +114,9 @@ $stmt_groups->execute();
 $groups_result = $stmt_groups->get_result();
 ?>
 
+<h1 class="text-center mb-4"><strong>Event Management</strong></h1>
 <div class="container mt-5">
-    <div class="card p-4 shadow-sm">
-        <h1 class="text-center mb-4"><strong>Event Management</strong></h1>
+    <div class="card p-4 border-0" style="border-radius: 10px;box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
 
         <!-- Future Events Section -->
         <div class="mb-4">
@@ -140,7 +146,7 @@ $groups_result = $stmt_groups->get_result();
             <?php endif; ?>
         </div>
     </div>
-    <div class="card p-4 shadow-sm mt-4">
+    <div class="card p-4 border-0 mt-4" style="border-radius: 10px;box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
         <!-- Past Events Section -->
         <div>
             <h3>Your Past Events</h3>

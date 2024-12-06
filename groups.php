@@ -7,7 +7,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COSN - About</title>
+    <title>COSN - Groups</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- Bootstrap boilerplate -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -44,6 +44,12 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">
@@ -60,7 +66,7 @@ session_start();
             <div class="row g-4">
                 <!-- Groups Info Card -->
                 <div class="col-lg-8">
-                    <div class="card rounded-lg border-0 shadow-sm" style="width: 100%;">
+                    <div class="card border-0" style="border-radius: 10px;box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
                         <div class="card-body">
                             <h2 class="card-title text-center"><strong>Groups You're In</strong></h2>
                             <?php
@@ -77,7 +83,7 @@ session_start();
                                         g.interest, 
                                         m.username AS member_username, 
                                         gm.role AS member_role
-                                    FROM groups g
+                                    FROM groupss g
                                     JOIN group_members gm ON g.group_id = gm.group_id
                                     JOIN members m ON gm.member_id = m.id
                                     WHERE g.group_id IN (
@@ -143,7 +149,7 @@ session_start();
                 </div>
                 <!-- Actions Card -->
                 <div class="col-lg-4 d-flex justify-content-center">
-                    <div class="card rounded-lg border-0 shadow-sm" style="width: 100%;">
+                    <div class="card border-0 mb-4" style="width: 60%;border-radius: 10px;box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
                         <div class="card-body">
                             <h2 class="card-title text-center"><strong>Group Actions</strong></h2>
                             <div class="list-group">

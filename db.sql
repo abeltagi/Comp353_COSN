@@ -44,7 +44,10 @@ DROP TABLE groups;
 DROP TABLE group_members;
 DROP TABLE group_posts;
 
-CREATE TABLE IF NOT EXISTS groups (
+drop table join_requests;
+
+-- the extra s at the end of groups IS NOT A TYPO ; groups is a keyword in MySQL
+CREATE TABLE IF NOT EXISTS groupss (
     group_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
     description TEXT,
@@ -58,7 +61,7 @@ CREATE TABLE IF NOT EXISTS group_members (
     member_id INT NOT NULL,
     role ENUM('Owner', 'Member') DEFAULT 'Member',
     PRIMARY KEY (group_id, member_id),
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES groupss(group_id) ON DELETE CASCADE,
     FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
 );
 
@@ -68,7 +71,7 @@ CREATE TABLE IF NOT EXISTS group_posts (
     member_id INT NOT NULL,
     content TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES groupss(group_id) ON DELETE CASCADE,
     FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
 );
 
@@ -79,7 +82,7 @@ CREATE TABLE IF NOT EXISTS join_requests (
     member_id INT NOT NULL,
     status ENUM('Pending', 'Accepted', 'Declined') DEFAULT 'Pending',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES groupss(group_id) ON DELETE CASCADE,
     FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
 );
 
@@ -115,7 +118,7 @@ CREATE TABLE IF NOT EXISTS events (
     organizer_username VARCHAR(255),
     group_id INT,
     FOREIGN KEY (organizer_username) REFERENCES members(username) ON DELETE CASCADE,
-    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE
+    FOREIGN KEY (group_id) REFERENCES groupss(group_id) ON DELETE CASCADE
 );
 -- related to table above events
 CREATE TABLE IF NOT EXISTS event_suggestions (
@@ -142,6 +145,45 @@ CREATE TABLE IF NOT EXISTS suggestion_votes (
     FOREIGN KEY (voted_by) REFERENCES members(id) ON DELETE CASCADE,
     UNIQUE(suggestion_id, voted_by) -- Ensure a user can vote for a suggestion only once
 );
+drop table suggestion_votes;
+
+
+CREATE TABLE senior_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    requested_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    message TEXT NOT NULL,
+    sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id) REFERENCES members(id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+CREATE TABLE wishlists (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    item_name VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+CREATE TABLE gifts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    wishlist_id INT NOT NULL,
+    giver_id INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (wishlist_id) REFERENCES wishlists(id) ON DELETE CASCADE,
+    FOREIGN KEY (giver_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+
+
 
 
 INSERT INTO events (event_name, description, event_date, location, organizer_username, group_id)
@@ -155,7 +197,7 @@ DROP TABLE friends;
 
 DROP TABLE blocks;
 
-SELECT group_id, name FROM groups WHERE owner_id = 1;
+SELECT group_id, name FROM groupss WHERE owner_id = 1;
 
 SELECT e.*
 FROM events e

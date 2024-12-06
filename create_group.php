@@ -44,6 +44,12 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="search.php"><strong>Search</strong></a>
                         </li>
                         <li class="nav-item">
@@ -112,7 +118,7 @@ session_start();
 
             if ($privilege === 'Admin' || $privilege === 'Senior') {
                 // Use a prepared statement to avoid SQL injection
-                $stmt = $conn->prepare("INSERT INTO groups (name, description, owner_id, interest) VALUES (?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO groupss (name, description, owner_id, interest) VALUES (?, ?, ?, ?)");
                 $stmt->bind_param("ssis", $name, $description, $owner_id, $interest);
                 $stmt->execute();
 

@@ -1,16 +1,26 @@
 <?php
+require 'config/db.php';
 session_start();
+
+// Ensure that the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COSN - Delete a Friend</title>
+    <title>COSN - Decline Senior Request</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- Bootstrap boilerplate -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
 <body style="background-color: #f4f4f4; font-family: Arial, sans-serif;">
@@ -59,60 +69,43 @@ session_start();
             </div>
         </nav>
     </header>
-    <main>
-        <div class="card p-4 shadow-sm">
-            <h3 class="mb-4"><strong>Delete a Friend</strong></h3>
+
+    <main class="container mt-5">
+        <div class="card p-4 shadow-sm border-0" style="border-radius: 10px;">
+            <h2 class="mb-4 text-center"><strong>Decline Senior Privilege Request</strong></h2>
+
             <?php
-           
-            require 'config/db.php';
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['request_id'])) {
+                $request_id = $_POST['request_id'];
 
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $friend_username = $_POST['friend_username']; // Friend's username to delete
-                $user_id = $_SESSION['user_id']; // Logged-in user ID
+                // Delete the request
+                $sql_delete_request = "DELETE FROM senior_requests WHERE id = ?";
+                $stmt = $conn->prepare($sql_delete_request);
+                $stmt->bind_param("i", $request_id);
 
-                // Fetch the friend's ID based on the username
-                $sql = "SELECT id FROM members WHERE username = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("s", $friend_username);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows > 0) {
-                    $friend = $result->fetch_assoc();
-                    $friend_id = $friend['id'];
-
-                    // Delete both records to remove the mutual friendship
-                    $sql = "DELETE FROM friends 
-                            WHERE (member_id = ? AND friend_id = ?) 
-                               OR (member_id = ? AND friend_id = ?)";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("iiii", $user_id, $friend_id, $friend_id, $user_id);
-
-                    if ($stmt->execute()) {
-                        echo '<div class="alert alert-success" role="alert">
-                                Friend removed successfully.
-                              </div>';
-                        echo '<a href="friends.php" class="btn btn-secondary mt-3">Go Back</a>';
-                    } else {
-                        echo '<div class="alert alert-danger" role="alert">
-                                Error: ' . htmlspecialchars($stmt->error) . '
-                              </div>';
-                        echo '<a href="friends.php" class="btn btn-secondary mt-3">Go Back</a>';
-                    }
+                if ($stmt->execute()) {
+                    echo '<div class="alert alert-success text-center">Request declined successfully.</div>';
                 } else {
-                    echo '<div class="alert alert-warning" role="alert">
-                            Friend not found.
-                          </div>';
-                    echo '<a href="friends.php" class="btn btn-secondary mt-3">Go Back</a>';
+                    echo '<div class="alert alert-danger text-center">Error declining request. Please try again later.</div>';
                 }
+            } else {
+                echo '<div class="alert alert-warning text-center">No request ID provided.</div>';
             }
             ?>
+
+            <div class="text-center mt-4">
+                <a href="admin_manage_privilege_status.php" class="btn btn-primary">Go Back</a>
+            </div>
         </div>
     </main>
 
     <!-- Bootstrap boilerplate -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

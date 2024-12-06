@@ -15,13 +15,12 @@ session_start();
 </head>
 
 <body style="background-color: #f4f4f4; font-family: Arial, sans-serif;">
-    <header>
+<header>
         <!-- Bootstrap Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"><strong>COSN</strong></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
@@ -45,6 +44,15 @@ session_start();
                             <a class="nav-link" href="groups.php"><strong>Your Groups</strong></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="gift_registry.php"><strong>Your Gifts/Wishlist</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="posts.php"><strong>Your Posts</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="search.php"><strong>Search</strong></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="logout.php"><strong>Logout</strong></a>
                         </li>
                     </ul>
@@ -61,7 +69,7 @@ session_start();
 
         // Fetch groups the user is in
         $sql_in_groups = "SELECT g.group_id, g.name, g.description 
-                        FROM groups g
+                        FROM groupss g
                         JOIN group_members gm ON g.group_id = gm.group_id
                         WHERE gm.member_id = ?";
         $stmt_in_groups = $conn->prepare($sql_in_groups);
