@@ -47,20 +47,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['post_content'])) {
     $visibility = $_POST['visibility']; // Public, Private, Group Only
     $group_id = $_POST['group_id'] ?? null; // Selected group for Group Only posts
     $status = ($visibility === 'Group' && $group_id) ? 'Pending' : 'Approved'; // Require approval for Group Only posts
+    $file_path = null;
+
+    // Handle file upload if a file is attached
+    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+        $upload_dir = 'uploads/';
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+        $file_name = basename($_FILES['file']['name']);
+        $target_file = $upload_dir . time() . "_" . $file_name;
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
+            $file_path = $target_file; // Save the file path for the database
+        } else {
+            echo "<div class='alert alert-danger'>Error uploading file.</div>";
+        }
+    }
 
     // Insert post into the database
-    $sql_insert = "INSERT INTO group_posts (member_id, content, visibility, group_id, status, created_at) 
-                   VALUES (?, ?, ?, ?, ?, NOW())";
+    $sql_insert = "INSERT INTO group_posts (member_id, content, visibility, group_id, file_path, status, created_at) 
+                   VALUES (?, ?, ?, ?, ?, ?, NOW())";
     $stmt_insert = $conn->prepare($sql_insert);
-    $stmt_insert->bind_param("issis", $user_id, $content, $visibility, $group_id, $status);
+    $stmt_insert->bind_param("ississ", $user_id, $content, $visibility, $group_id, $file_path, $status);
     if ($stmt_insert->execute()) {
         $message = ($status === 'Pending') ? "Your post is pending approval by the group owner." : "Post submitted successfully!";
         echo "<div class='alert alert-success'>$message</div>";
         header("Location: posts.php");
+        exit;
     } else {
         echo "<div class='alert alert-danger'>Error submitting post: {$stmt_insert->error}</div>";
     }
 }
+
 
 // Handle post approval/rejection
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_POST['post_id'])) {
@@ -163,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_comment'])) {
 }
 
 
-// Handle comment deletion
+
 // Handle comment deletion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_comment'])) {
     $comment_id = $_POST['comment_id'];
@@ -267,38 +286,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_comment'])) {
     <div class="card p-4 shadow-sm post-card">
         <h2 class="text-center text-primary mb-4"><strong>Your Posts</strong></h2>
         <div class="avatar" style="background-image: url('avatar-placeholder.png');"></div>
-        <form method="POST" action="#" class="post-form">
-            <div class="mb-3">
-                <label for="postContent" class="form-label">Say something...</label>
-                <textarea id="postContent" name="post_content" class="form-control" rows="3" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Privacy:</label><br>
-                <input type="radio" name="visibility" value="Public" required> Public<br>
-                <input type="radio" name="visibility" value="Private"> Private (Friends Only)<br>
-                <input type="radio" name="visibility" value="Group" id="groupOnlyRadio"> Group Only<br>
-            </div>
-            <div class="mb-3" id="groupSelection" style="display: none;">
-                <label for="group_id" class="form-label">Select Group:</label>
-                <select id="group_id" name="group_id" class="form-select">
-                    <?php foreach ($user_groups as $group): ?>
-                        <option value="<?php echo $group['group_id']; ?>"><?php echo htmlspecialchars($group['name']); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Post</button>
-        </form>
+        <form method="POST" action="posts.php" enctype="multipart/form-data" class="post-form">
+    <div class="mb-3">
+        <label for="postContent" class="form-label">Say something...</label>
+        <textarea id="postContent" name="post_content" class="form-control" rows="3" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Privacy:</label><br>
+        <input type="radio" name="visibility" value="Public" required> Public<br>
+        <input type="radio" name="visibility" value="Private"> Private (Friends Only)<br>
+        <input type="radio" name="visibility" value="Group" id="groupOnlyRadio"> Group Only<br>
+    </div>
+    <div class="mb-3" id="groupSelection" style="display: none;">
+        <label for="group_id" class="form-label">Select Group:</label>
+        <select id="group_id" name="group_id" class="form-select">
+            <?php foreach ($user_groups as $group): ?>
+                <option value="<?php echo $group['group_id']; ?>"><?php echo htmlspecialchars($group['name']); ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="file" class="form-label">Attach an image or video:</label>
+        <input type="file" name="file" id="file" class="form-control" accept="image/*,video/*">
+    </div>
+    <button type="submit" class="btn btn-primary">Post</button>
+</form>
+
     </div>
 
-    <!-- Feed Posts Section -->
-    <div class="mt-5">
-        <h3><strong>Your Feed Posts</strong></h3>
-        
-        
-        <div class="feed">
+<!-- Feed Posts Section -->
+<div class="mt-5">
+    <h3><strong>Your Feed Posts</strong></h3>
+
+    <div class="feed">
     <?php
     // Fetch approved posts visible to the user
-    $sql_feed = "SELECT gp.post_id, gp.content, gp.created_at, m.username, gp.member_id, gp.group_id, gp.visibility, g.owner_id AS group_owner_id 
+    $sql_feed = "SELECT gp.post_id, gp.content, gp.file_path, gp.created_at, m.username, gp.member_id, gp.group_id, gp.visibility, g.owner_id AS group_owner_id 
                  FROM group_posts gp
                  JOIN members m ON gp.member_id = m.id
                  LEFT JOIN groupss g ON gp.group_id = g.group_id
@@ -319,53 +342,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_comment'])) {
     $result_feed = $stmt_feed->get_result();
 
     while ($post = $result_feed->fetch_assoc()): ?>
-        
-        
         <div class="post card mt-3 shadow-sm post-card p-3">
             <p class="mb-0"><?php echo htmlspecialchars($post['content']); ?></p>
             <small class="text-muted">Posted by: <?php echo htmlspecialchars($post['username']); ?> on <?php echo $post['created_at']; ?></small>
 
-            <p class="mb-0"><?php echo htmlspecialchars($post['content']); ?></p>
-    <small class="text-muted">Posted by: <?php echo htmlspecialchars($post['username']); ?> on <?php echo $post['created_at']; ?></small>
-    
-    <!-- Display Comments -->
-    <div class="comments mt-3">
-    <h6>Comments:</h6>
-    <?php
-    $sql_comments = "SELECT c.comment_id, c.comment_text, c.created_at, c.member_id, m.username
-                     FROM comments c
-                     JOIN members m ON c.member_id = m.id
-                     WHERE c.post_id = ?
-                     ORDER BY c.created_at ASC";
-    $stmt_comments = $conn->prepare($sql_comments);
-    $stmt_comments->bind_param("i", $post['post_id']);
-    $stmt_comments->execute();
-    $result_comments = $stmt_comments->get_result();
-
-    while ($comment = $result_comments->fetch_assoc()): ?>
-        <div class="comment">
-            <strong><?php echo htmlspecialchars($comment['username']); ?>:</strong>
-            <span><?php echo htmlspecialchars($comment['comment_text']); ?></span>
-            <small class="text-muted">on <?php echo $comment['created_at']; ?></small>
-            <!-- Delete Comment Button -->
-            <?php if ($comment['member_id'] == $user_id || $post['member_id'] == $user_id): ?>
-                <form method="POST" action="posts.php" class="d-inline">
-                    <input type="hidden" name="comment_id" value="<?php echo $comment['comment_id']; ?>">
-                    <button type="submit" name="delete_comment" class="btn btn-danger btn-sm">Delete</button>
-                </form>
+            <!-- Display Uploaded File -->
+            <?php if (!empty($post['file_path'])): ?>
+                <div class="mt-3">
+                    <?php if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $post['file_path'])): ?>
+                        <img src="<?php echo htmlspecialchars($post['file_path']); ?>" class="img-fluid" alt="Post Image">
+                    <?php elseif (preg_match('/\.(mp4|webm|ogg)$/i', $post['file_path'])): ?>
+                        <video controls class="w-100">
+                            <source src="<?php echo htmlspecialchars($post['file_path']); ?>" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
-        </div>
-    <?php endwhile; ?>
-</div>
 
+            <!-- Display Comments -->
+            <div class="comments mt-3">
+                <h6>Comments:</h6>
+                <?php
+                $sql_comments = "SELECT c.comment_id, c.comment_text, c.created_at, c.member_id, m.username
+                                 FROM comments c
+                                 JOIN members m ON c.member_id = m.id
+                                 WHERE c.post_id = ?
+                                 ORDER BY c.created_at ASC";
+                $stmt_comments = $conn->prepare($sql_comments);
+                $stmt_comments->bind_param("i", $post['post_id']);
+                $stmt_comments->execute();
+                $result_comments = $stmt_comments->get_result();
 
-    <!-- Add Comment Form -->
-    <form method="POST" action="posts.php" class="mt-3">
-        <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
-        <textarea name="comment_text" class="form-control mb-2" placeholder="Write a comment..." required></textarea>
-        <button type="submit" name="add_comment" class="btn btn-primary btn-sm">Comment</button>
-    </form>
+                while ($comment = $result_comments->fetch_assoc()): ?>
+                    <div class="comment">
+                        <strong><?php echo htmlspecialchars($comment['username']); ?>:</strong>
+                        <span><?php echo htmlspecialchars($comment['comment_text']); ?></span>
+                        <small class="text-muted">on <?php echo $comment['created_at']; ?></small>
+                        <!-- Delete Comment Button -->
+                        <?php if ($comment['member_id'] == $user_id || $post['member_id'] == $user_id): ?>
+                            <form method="POST" action="posts.php" class="d-inline">
+                                <input type="hidden" name="comment_id" value="<?php echo $comment['comment_id']; ?>">
+                                <button type="submit" name="delete_comment" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+                <?php endwhile; ?>
+            </div>
 
+            <!-- Add Comment Form -->
+            <form method="POST" action="posts.php" class="mt-3">
+                <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
+                <textarea name="comment_text" class="form-control mb-2" placeholder="Write a comment..." required></textarea>
+                <button type="submit" name="add_comment" class="btn btn-primary btn-sm">Comment</button>
+            </form>
 
             <!-- Allow the post owner to delete their own post -->
             <?php if ($post['member_id'] === $user_id): ?>
@@ -392,13 +422,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_comment'])) {
             <?php endif; ?>
         </div>
     <?php endwhile; ?>
+    </div>
 </div>
 
-
-
-        
-
-</div>
 
     <!-- Group Posts to Approve Section -->
     <?php if ($result_pending->num_rows > 0): ?>

@@ -84,6 +84,9 @@ ALTER TABLE group_posts
 ADD COLUMN status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
 ADD COLUMN accessible_by TEXT DEFAULT 'all', -- Comma-separated group IDs or 'all' for all groups
 ADD COLUMN visibility ENUM('Private', 'Group', 'Public') DEFAULT 'Group';
+ALTER TABLE group_posts 
+ADD COLUMN file_path VARCHAR(255) DEFAULT NULL;
+
 
 
 
