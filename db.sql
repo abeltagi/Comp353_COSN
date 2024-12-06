@@ -65,6 +65,11 @@ CREATE TABLE IF NOT EXISTS group_members (
     FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
 );
 
+ALTER TABLE group_members
+ADD COLUMN can_comment BOOLEAN DEFAULT TRUE,
+ADD COLUMN can_add_content BOOLEAN DEFAULT TRUE;
+-- VERY IMPORTANT
+
 CREATE TABLE IF NOT EXISTS group_posts (
     post_id INT AUTO_INCREMENT PRIMARY KEY,
     group_id INT NOT NULL,
@@ -74,6 +79,12 @@ CREATE TABLE IF NOT EXISTS group_posts (
     FOREIGN KEY (group_id) REFERENCES groupss(group_id) ON DELETE CASCADE,
     FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
 );
+-- VERY IMPORTANT
+ALTER TABLE group_posts
+ADD COLUMN status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+ADD COLUMN accessible_by TEXT DEFAULT 'all', -- Comma-separated group IDs or 'all' for all groups
+ADD COLUMN visibility ENUM('Private', 'Group', 'Public') DEFAULT 'Group';
+
 
 
 CREATE TABLE IF NOT EXISTS join_requests (
@@ -182,6 +193,16 @@ CREATE TABLE gifts (
     FOREIGN KEY (giver_id) REFERENCES members(id) ON DELETE CASCADE
 );
 
+
+CREATE TABLE IF NOT EXISTS comments (
+    comment_id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    member_id INT NOT NULL,
+    comment_text TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES group_posts(post_id) ON DELETE CASCADE,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+);
 
 
 

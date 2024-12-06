@@ -125,8 +125,8 @@ session_start();
                                             <div class="d-flex gap-2">
                                                 <!-- Privilege Dropdown -->
                                                 <select name="new_privilege" class="form-select form-select-sm">
-                                                    <option value="Junior"
-                                                        <?php echo $member['privilege'] === 'Junior' ? 'selected' : ''; ?>>
+                                                    <option value="Member"
+                                                        <?php echo $member['privilege'] === 'Member' ? 'selected' : ''; ?>>
                                                         Member/Junior</option>
                                                     <option value="Senior"
                                                         <?php echo $member['privilege'] === 'Senior' ? 'selected' : ''; ?>>
