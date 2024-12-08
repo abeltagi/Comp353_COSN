@@ -209,49 +209,13 @@ session_start();
                     <img src="https://via.placeholder.com/150" alt="Profile Picture" class="rounded-circle mb-3">
                     <h2><?php echo htmlspecialchars($user['firstname']); ?></h2>
                     <p>Username: <?php echo htmlspecialchars($user['username'] ?? $user['name']); ?></p>
-                    <textarea placeholder="Say something..." class="form-control mb-3"></textarea>
-                    <div class="privacy-options">
-                        <div>
-                            <label><input type="radio" name="privacy" value="private" checked> Private</label>
-                        </div>
-                        <div>
-                            <label><input type="radio" name="privacy" value="group"> Group Only</label>
-                        </div>
-                        <div>
-                            <label><input type="radio" name="privacy" value="public"> Public</label>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary btn-custom mt-3">Post</button>
-                </div>
-
-                <!-- Posts -->
-                <div class="posts-card">
-                    <h4>Posts</h4>
-                    <p>No posts yet!</p>
+                    
                 </div>
             </div>
 
             <!-- Right Sidebar -->
             <div class="col-md-3">
-                
-                <!-- Contacts -->
-                <div class="contacts-card">
-                    <h4>Contacts</h4>
-                    <p>No contacts yet!</p>
-                </div>
-
-                <!-- Gift Registry -->
-                <div class="gifts-card">
-                    <h4>Gift Registry</h4>
-                    <ul>
-                        <li>Wheel of Cheese [<span class="text-success">received</span>] [<a href="#">remove</a>]</li>
-                        <li>Magic Sword [<span class="text-success">received</span>] [<a href="#">remove</a>]</li>
-                    </ul>
-                    <form action="add_gift.php" method="POST">
-                        <input type="text" name="new_gift" placeholder="Add a new gift" class="form-control" required>
-                        <button type="submit" class="btn btn-success btn-custom mt-2">Add</button>
-                    </form>
-                </div>
+                <!--EMPTY-->
             </div>
         </div>
     </div>
